@@ -5,10 +5,14 @@
 package sockets;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Scanner;
 /**
  *
- * @author Usuario
+ * @autho@author Jessica Castro
+ * Farid Pozos
+ * Andrés Montes
  */
 public class ConexionSQL {
     //Ruta de la base de datos SQLITE
@@ -42,5 +46,45 @@ public class ConexionSQL {
     }
   public static String getDireccionDB() {
         return DireccionDB;
-    }  
+    }
+  public static void agregarUsuario() {
+        try (Connection conexion = DriverManager.getConnection(DireccionDB)) {
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.print("Nombre del usuario: ");
+            String nombre = scanner.nextLine();
+
+            System.out.print("Apellidos del usuario: ");
+            String apellidos = scanner.nextLine();
+
+            System.out.print("Correo electrónico del usuario: ");
+            String correo = scanner.nextLine();
+
+            System.out.print("Teléfono del usuario: ");
+            String telefono = scanner.nextLine();
+
+            System.out.print("Ubicación del usuario: ");
+            String ubicacion = scanner.nextLine();
+
+            String sql = "INSERT INTO USUARIOS (NOMBRE, APELLIDOS, CORREO_ELECTRONICO, TELEFONO, UBICACION) " +
+                         "VALUES (?, ?, ?, ?, ?)";
+
+            try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+                statement.setString(1, nombre);
+                statement.setString(2, apellidos);
+                statement.setString(3, correo);
+                statement.setString(4, telefono);
+                statement.setString(5, ubicacion);
+
+                int filasInsertadas = statement.executeUpdate();
+                if (filasInsertadas > 0) {
+                    System.out.println("Usuario agregado correctamente.");
+                } else {
+                    System.out.println("No se pudo agregar el usuario.");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al agregar usuario: " + e.getMessage());
+        }
+  }
 }

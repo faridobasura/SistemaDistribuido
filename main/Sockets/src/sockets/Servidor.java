@@ -20,6 +20,8 @@ import java.util.logging.Logger;
 /**
  *
  * @author Jessica Castro
+ * Farid Pozos
+ * Andrés Montes
  */
 public class Servidor {
 
@@ -32,8 +34,7 @@ public class Servidor {
             ServerSocket server = new ServerSocket(5000);
             Socket sc;
             
-            /*String nick, ip, mensaje;   //  <-------------------
-            PaqueteEnvio dataIn;    //  <-------------------*/
+            
             
             ArrayList<Socket> listaClientesS = new ArrayList<>();   // Lista de sockets
             ArrayList<String> listaClientesN = new ArrayList<>();   // Lista de nombres
@@ -60,9 +61,7 @@ public class Servidor {
                 ServidorHilo hilo = new ServidorHilo(in, out, nombreCliente);
                 hilo.start();
                 
-                /*System.out.println("Creada la conexion con el cliente " + nombreCliente +
-                " con la direccion: " + listaClientesS.get(nC).getInetAddress() + 
-                " con el puerto: " + listaClientesS.get(nC).getLocalPort());*/
+                
                 System.out.println("Creada la conexion con el cliente " + nombreCliente +
                 " con la direccion: " + ipCliente + 
                 " con el puerto: " + listaClientesS.get(nC-1).getLocalPort());
@@ -72,9 +71,7 @@ public class Servidor {
             }
         } catch (IOException ex){
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
-        } /*catch (ClassNotFoundException ex) {
-            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        } 
         
     }
     

@@ -12,7 +12,9 @@ import java.sql.Statement;
 
 /**
  *
- * @author Usuario
+ * @author Jessica Castro
+ * Farid Pozos
+ * Andrés Montes
  */
 public class ConsultaIngenieros extends Consulta{
 

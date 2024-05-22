@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 /**
  *
  * @author Jessica Castro
+ * Farid Pozos
+ * Andrés Montes
  */
 public class ClienteServidorHilo extends Thread{
     

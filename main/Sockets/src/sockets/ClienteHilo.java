@@ -25,6 +25,8 @@ import java.util.logging.Logger;
 /**
  *
  * @author Jessica Castro
+ * Farid Pozos
+ * Andrés Montes
  */
 public class ClienteHilo extends Thread{
     
@@ -101,23 +103,27 @@ public class ClienteHilo extends Thread{
         boolean salir = false;
         while(!salir){
         System.out.println("\n\tMenú de Ingeniero: ");
-        System.out.println("\n1. Usuarios");
-        System.out.println("\n2. Tickets");
-        System.out.println("\n3. Dispositivos");
-        System.out.println("\n4. Regresar al menu anterior");
+        System.out.println("\n1. Ingenieros");
+        System.out.println("\n2. Usuarios");
+        System.out.println("\n3. Tickets");
+        System.out.println("\n4. Dispositivos");
+        System.out.println("\n5. Regresar al menu anterior");
         int opcion = scanner.nextInt();
         scanner.nextLine();
         switch (opcion) {
                 case 1:
-                    ClienteHilo.MenuIngenierio_Usuario(scanner);
+                    ClienteHilo.MenuIngenierio_Ingeniero(scanner);
                     break;
                 case 2:
-                    MenuIngeniero_Ticket(scanner);
+                    ClienteHilo.MenuIngenierio_Usuario(scanner);
                     break;
                 case 3:
-                    MenuIngeniero_Dispositivo(scanner);
+                    ClienteHilo.MenuIngeniero_Ticket(scanner);
                     break;
                 case 4:
+                    ClienteHilo.MenuIngeniero_Dispositivo(scanner);
+                    break;
+                case 5:
                     salir = true;
                     break;
                 default:
@@ -125,7 +131,60 @@ public class ClienteHilo extends Thread{
             }
         }
     }
-     private static void MenuIngenierio_Usuario(Scanner scanner) {
+    
+    private static void MenuIngenierio_Ingeniero(Scanner scanner) {
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("\nIngenieros:");
+            System.out.println("1. Consultar");
+            System.out.println("2. Actualizar");
+            System.out.println("3. Volver al menú anterior");
+            int option = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (option) {
+                case 1:
+                    System.out.println("Consultando ingenieros...");
+                    ConsultaIngenieros consulta = new ConsultaIngenieros(ConexionSQL.getDireccionDB()) {};
+                    break;
+                case 2:
+                    MenuIngeniero_ActualizacionIngenieros(scanner);
+                    break;
+                case 3:
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Opción no válida. Por favor, intente de nuevo.");
+            }
+        }
+    }
+    private static void MenuIngeniero_ActualizacionIngenieros(Scanner scanner) {
+        boolean salir = false;
+
+        while (!salir) {
+            System.out.println("2. Eliminar");
+            System.out.println("3. Volver al menú anterior");
+            int opcion = scanner.nextInt();            System.out.println("\nActualizar Ingenieros:");
+            System.out.println("1. Agregar");
+
+            scanner.nextLine(); // Consume newline
+
+            switch (opcion) {
+                case 1:
+                    GestionDB.agregarIngeniero();
+                    break;
+                case 2:
+                    GestionDB.eliminarIngeniero();
+                    break;
+                case 3:
+                    salir = true;
+                    break;
+                default:
+                    System.out.println("Opción no válida. Por favor, intente de nuevo.");
+            }
+        }
+    }private static void MenuIngenierio_Usuario(Scanner scanner) {
         boolean exit = false;
 
         while (!exit) {
@@ -139,10 +198,10 @@ public class ClienteHilo extends Thread{
             switch (option) {
                 case 1:
                     System.out.println("Consultando usuarios...");
-                    ConsultaUsuarios consulta = new ConsultaUsuarios(ConexionSQL.getDireccionDB()) {};
+                    ConsultaIngenieros consulta = new ConsultaIngenieros(ConexionSQL.getDireccionDB()) {};
                     break;
                 case 2:
-                    MenuIngeniero_ActualizacionUsuarios(scanner);
+                    MenuIngeniero_ActualizacionIngenieros(scanner);
                     break;
                 case 3:
                     exit = true;
@@ -165,12 +224,10 @@ public class ClienteHilo extends Thread{
 
             switch (opcion) {
                 case 1:
-                    System.out.println("Agregando usuario...");
-                    // Lógica para agregar usuarios
+                    GestionDB.agregarUsuario();                    
                     break;
                 case 2:
-                    System.out.println("Eliminando usuario...");
-                    // Lógica para eliminar usuarios
+                    GestionDB.eliminarUsuario();
                     break;
                 case 3:
                     salir = true;
@@ -193,8 +250,7 @@ public class ClienteHilo extends Thread{
 
             switch (opcion) {
                 case 1:
-                    System.out.println("Consultando tickets...");
-                    ConsultaTickets consulta = new ConsultaTickets(ConexionSQL.getDireccionDB()) {};
+                    ConsultaTickets consulta = new ConsultaTickets(ConexionSQL.getDireccionDB());
                     break;
                 case 2:
                     System.out.println("Cerrando ticket...");

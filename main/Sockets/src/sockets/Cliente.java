@@ -19,6 +19,8 @@ import java.util.HashMap;
 /**
  *
  * @author Jessica Castro
+ * Farid Pozos
+ * Andrés Montes
  */
 public class Cliente {
 

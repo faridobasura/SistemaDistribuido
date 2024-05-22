@@ -18,6 +18,8 @@ import java.util.logging.Logger;
 /**
  *
  * @author Jessica Castro
+ * Farid Pozos
+ * Andrés Montes
  */
 public class ServidorHilo extends Thread{
     private DataInputStream in;
