@@ -35,38 +35,35 @@ public class Cliente {
             Socket sc = new Socket(dir, 5000);
             PaqueteEnvio dataOut = new PaqueteEnvio();    //  <-------------------
             
-            //PaqueteEnvio dataOut = new PaqueteEnvio();    //  <-------------------
             
             DataInputStream in = new DataInputStream(sc.getInputStream());
             DataOutputStream out = new DataOutputStream(sc.getOutputStream());
             
             String mensaje = in.readUTF();
-            //System.out.println(mensaje);
-        int seleccion;
-        do {
-            System.out.println("\tBienvenido ");
-            System.out.println("1. Nodo1");
-            System.out.println("2. Nodo2");
-            System.out.println("3. Nodo3");
-            System.out.println("Ingrese el numero del nodo para comunicarse: ");
-            seleccion = sn.nextInt();
-            
-            if(seleccion < 1 || seleccion > 3){
+            int seleccion;
+            do {
+                System.out.println("\tBienvenido ");
+                System.out.println("1. Nodo1");
+                System.out.println("2. Nodo2");
+                System.out.println("3. Nodo3");
+                System.out.println("Ingrese el numero del nodo para comunicarse: ");
+                seleccion = sn.nextInt();
+                if(seleccion < 1 || seleccion > 3){
                     System.out.println("Nodo no disponible, vuelve a elegir.");
-               }
-        } while(seleccion < 1 || seleccion > 3);
-            String direccionIp;
-            switch (seleccion) {
-                case 1:
-                    direccionIp = "192.168.129.130";
-                    break;
-                case 2:
-                    direccionIp = "192.168.129.131";
-                    break;
-                case 3: 
-                    direccionIp = "192.168.129.132";
-                    break;
-                default:
+                  }
+            }while(seleccion < 1 || seleccion > 3);
+                String direccionIp;
+                switch (seleccion) {
+                    case 1:
+                        direccionIp = "192.168.129.130";
+                        break;
+                    case 2:
+                        direccionIp = "192.168.129.131";
+                        break;
+                    case 3: 
+                        direccionIp = "192.168.129.132";
+                        break;
+                    default:
                     break;
 }
            /* 
