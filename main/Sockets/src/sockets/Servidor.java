@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,26 +42,12 @@ public class Servidor {
             
             System.out.println("Servidor iniciado");
             while(true){
-                
+                Connection conexion = ConexionSQL.conectar();
                 sc = server.accept();
                 listaClientesS.add(sc);
                 
                 DataInputStream in = new DataInputStream(sc.getInputStream());
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
-                
-                /*ObjectInputStream pData = new ObjectInputStream(sc.getInputStream());    //  <-------------------
-                dataIn = (PaqueteEnvio) pData.readObject(); //  <-------------------
-                
-                nick = dataIn.getNick();    //  <-------------------
-                ip = dataIn.getIp();    //  <-------------------
-                mensaje = dataIn.getMensaje();  //  <-------------------
-                System.out.println(nick + ": " + mensaje + " para " + ip);  //  <-------------------
-                Socket ss = new Socket(ip, 5001);   //  <-------------------
-                ObjectOutputStream pData2Send = new ObjectOutputStream(sc.getOutputStream());    //  <-------------------
-                pData2Send.writeObject(dataIn);
-                pData2Send.close();
-                ss.close();
-                */
                 
                 System.out.println("Nuevo cliente (" + nC + ")");
                 out.writeUTF("Indica tu nombre");
@@ -81,7 +68,7 @@ public class Servidor {
                 " con el puerto: " + listaClientesS.get(nC-1).getLocalPort());
                 
                 nC += 1;
-                
+                ConexionSQL.desconectar(conexion);
             }
         } catch (IOException ex){
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
@@ -92,108 +79,3 @@ public class Servidor {
     }
     
 }
-
-/*
-class Paquete1{
-private String mensaje;
-private String ip;
-private String nick2;
-private ArrayList<String> dirIps;
-private ArrayList<Controles> control;
-private int puerto;
-private String destinatario;
-
-    public String getDestinatario() {
-        return destinatario;
-    }
-
-    public void setDestinatario(String destinatario) {
-        this.destinatario = destinatario;
-    }
-    public int getPuerto() {
-        return puerto;
-    }
-
-    public void setPuerto(int puerto) {
-        this.puerto = puerto;
-    }
-
-    public ArrayList<Controles> getControl() {
-        return control;
-    }
-
-    public void setControl(ArrayList<Controles> control) {
-        this.control = control;
-    }
-   
-   
-    public ArrayList<String> getDirIps() {
-        return dirIps;
-    }
-
-    public void setDirIps(ArrayList<String> dirIps) {
-        this.dirIps = dirIps;
-    }
-
-
- 
-
- 
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getNick2() {
-        return nick2;
-    }
-
-    public void setNick2(String nick2) {
-        this.nick2 = nick2;
-    }
-
- 
-
-}
-class Controles{
-private String ipcontrol;
-private String nombrecontrol;
-private int puerto;
-
-    public int getPuerto() {
-        return puerto;
-    }
-
-    public void setPuerto(int puerto) {
-        this.puerto = puerto;
-    }
-
-    public String getIpcontrol() {
-        return ipcontrol;
-    }
-
-    public void setIpcontrol(String ipcontrol) {
-        this.ipcontrol = ipcontrol;
-    }
-
-    public String getNombrecontrol() {
-        return nombrecontrol;
-    }
-
-    public void setNombrecontrol(String nombrecontrol) {
-        this.nombrecontrol = nombrecontrol;
-    }
-
-}
-*/

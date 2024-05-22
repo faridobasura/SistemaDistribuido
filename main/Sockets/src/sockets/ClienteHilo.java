@@ -13,6 +13,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,7 +42,7 @@ public class ClienteHilo extends Thread{
     
     @Override
     public void run(){
-        
+        Connection conexion = ConexionSQL.conectar();
         Scanner sn = new Scanner(System.in);
 
         String mensaje;
@@ -85,33 +90,7 @@ public class ClienteHilo extends Thread{
             }
 
         }
-            
-            
-            
-            
-            /*try {   //  <-------------------
-            ServerSocket server = new ServerSocket(5001);   //  <-------------------
-            Socket sc;  //  <-------------------
-            
-            PaqueteEnvio dataIn;    //  <-------------------
-            
-            while(true) {   //  <-------------------
-            
-            sc = server.accept();   //  <-------------------
-            
-            ObjectInputStream pData = new ObjectInputStream(sc.getInputStream());    //  <-------------------
-            dataIn = (PaqueteEnvio) pData.readObject(); //  <-------------------
-            System.out.println(dataIn.getNick() + ": " + dataIn.getMensaje());  //  <-------------------
-                
-            }   //  <-------------------
-            
-            } catch (IOException ex) {  //  <-------------------
-            Logger.getLogger(ClienteHilo.class.getName()).log(Level.SEVERE, null, ex);  //  <-------------------
-            } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClienteHilo.class.getName()).log(Level.SEVERE, null, ex);  //  <-------------------
-            }   //  <-------------------*/
-
-        
+            ConexionSQL.desconectar(conexion);
     }
     
     public int generaNumeroAleatorio(int minimo, int maximo){
@@ -160,7 +139,7 @@ public class ClienteHilo extends Thread{
             switch (option) {
                 case 1:
                     System.out.println("Consultando usuarios...");
-                    // Lógica para consultar usuarios
+                    ConsultaUsuarios consulta = new ConsultaUsuarios(ConexionSQL.getDireccionDB()) {};
                     break;
                 case 2:
                     MenuIngeniero_ActualizacionUsuarios(scanner);
@@ -215,7 +194,7 @@ public class ClienteHilo extends Thread{
             switch (opcion) {
                 case 1:
                     System.out.println("Consultando tickets...");
-                    // Lógica para consultar tickets
+                    ConsultaTickets consulta = new ConsultaTickets(ConexionSQL.getDireccionDB()) {};
                     break;
                 case 2:
                     System.out.println("Cerrando ticket...");
@@ -243,7 +222,7 @@ public class ClienteHilo extends Thread{
             switch (opcion) {
                 case 1:
                     System.out.println("Consultando dispositivos...");
-                    // Lógica para consultar dispositivos
+                    ConsultaDispositivos consulta = new ConsultaDispositivos(ConexionSQL.getDireccionDB()) {};
                     break;
                 case 2:
                     MenuIngeniero_ActualizacionDispositivo(scanner);
@@ -301,7 +280,7 @@ public class ClienteHilo extends Thread{
                     break;
                 case 2:
                     System.out.println("Consultando dispositivos...");
-                    // Lógica para consultar dispositivos
+                    ConsultaDispositivos consulta = new ConsultaDispositivos(ConexionSQL.getDireccionDB()) {};
                     break;
                 case 3:
                     salir = true;
@@ -325,7 +304,7 @@ public class ClienteHilo extends Thread{
             switch (opcion) {
                 case 1:
                     System.out.println("Consultando tickets...");
-                    // Lógica para consultar tickets
+                    ConsultaTickets consulta = new ConsultaTickets(ConexionSQL.getDireccionDB()) {};
                     break;
                 case 2:
                     System.out.println("Levantando ticket...");
@@ -339,6 +318,7 @@ public class ClienteHilo extends Thread{
             }
         }
     }
+     
 }
     
 
