@@ -31,7 +31,7 @@ public class Cliente {
         try {
             Scanner sn = new Scanner(System.in);
             sn.useDelimiter("\n");
-            String dir = "192.168.177.1";   // AQUI SE TIENE QUE SUSTITUIR LA IP POR LA DE LA MAQUINA DEL SERVIDOR
+            String dir = "192.168.129.1";   // AQUI SE TIENE QUE SUSTITUIR LA IP POR LA DE LA MAQUINA DEL SERVIDOR
 // AQUI SE TIENE QUE SUSTITUIR LA IP POR LA DE LA MAQUINA DEL SERVIDOR
             
             
@@ -45,28 +45,19 @@ public class Cliente {
             
 
             
-            int puertoRandom = generaPuertoAleatorio(5001, 5100);
-            Thread hiloEscucha = new Thread(new ClienteServidorHilo(puertoRandom));
-            //ClienteServidorHilo hiloEscucha = new ClienteServidorHilo();
-            ClienteHilo hiloMenu = new ClienteHilo(in, out, sc, puertoRandom);
+            Thread hiloEscucha = new Thread(new ClienteServidorHilo(5001));
+            ClienteHilo hiloMenu = new ClienteHilo(in, out, sc, 5001);
             hiloEscucha.start();
             hiloMenu.start();
             hiloMenu.join();
             hiloEscucha.join();
             
-            //ClienteServidorHilo hiloEscucha = new ClienteServidorHilo();
             
             
-        } catch (IOException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
+        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-    }
-    
-    public static int generaPuertoAleatorio(int minimo, int maximo){
-        return (int)Math.floor(Math.random() * (maximo-minimo+1) + (minimo));
     }
     
 }

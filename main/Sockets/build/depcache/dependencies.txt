@@ -89,10 +89,10 @@ java.io.DataInputStream
 java.net.Socket
 java.sql.Connection
 java.lang.System
-sockets.ClienteHilo$5
-sockets.ClienteHilo$4
+sockets.ConsultaDispositivos
 sockets.ConexionSQL
 java.util.Scanner
+sockets.ConsultaIngenieros
 java.io.IOException
 sockets.ClienteHilo
 java.util.logging.Logger
@@ -100,8 +100,6 @@ java.util.logging.Level
 sockets.ConsultaTickets
 java.io.DataOutputStream
 java.lang.Thread
-sockets.ClienteHilo$3
-sockets.ClienteHilo$2
 java.lang.Class
 sockets.ClienteHilo$1
 java.lang.String
@@ -109,7 +107,6 @@ sockets.GestionDB
 ||:sockets.Cliente
 java.io.DataInputStream
 java.net.Socket
-sockets.PaqueteEnvio
 java.lang.System
 java.util.Scanner
 java.io.IOException
@@ -177,7 +174,7 @@ sockets.ClienteHilo$2
 sockets.ConsultaIngenieros
 sockets.ClienteHilo
 ||:sockets.ClienteHilo$1
-sockets.ConsultaIngenieros
+sockets.ConsultaDispositivos
 sockets.ClienteHilo$1
 sockets.ClienteHilo
 ||:sockets.ConsultaUsuarios
@@ -199,9 +196,11 @@ java.lang.Throwable
 java.sql.Connection
 java.lang.System
 java.util.Scanner
+java.lang.NumberFormatException
 java.sql.PreparedStatement
 java.lang.Integer
 java.sql.SQLException
+java.sql.ResultSet
 java.lang.Object
 java.lang.StringBuilder
 java.lang.String
