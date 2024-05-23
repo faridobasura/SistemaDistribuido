@@ -32,35 +32,17 @@ public class Cliente {
             Scanner sn = new Scanner(System.in);
             sn.useDelimiter("\n");
             String dir = "192.168.177.1";   // AQUI SE TIENE QUE SUSTITUIR LA IP POR LA DE LA MAQUINA DEL SERVIDOR
+// AQUI SE TIENE QUE SUSTITUIR LA IP POR LA DE LA MAQUINA DEL SERVIDOR
             
             
-            Socket sc = new Socket(dir, 5000);
-            PaqueteEnvio dataOut = new PaqueteEnvio();    //  <-------------------
+            Socket sc = new Socket(dir, 5001);
+            //  <-------------------
             
             
             DataInputStream in = new DataInputStream(sc.getInputStream());
             DataOutputStream out = new DataOutputStream(sc.getOutputStream());
             
-            String mensaje = in.readUTF();
-            int seleccion;
-            do {
-                System.out.println("\tBienvenido ");
             
-            }while(seleccion < 1 || seleccion > 3);
-                String direccionIp;
-                switch (seleccion) {
-                    case 1:
-                        direccionIp = "192.168.129.130";
-                        break;
-                    case 2:
-                        direccionIp = "192.168.129.131";
-                        break;
-                    case 3: 
-                        direccionIp = "192.168.129.132";
-                        break;
-                    default:
-                    break;
-}
 
             
             int puertoRandom = generaPuertoAleatorio(5001, 5100);

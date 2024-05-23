@@ -7,12 +7,15 @@ package sockets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
  *
- * @author Usuario
+ * @author Jessica Castro
+ * Farid Pozos
+ * Andrés Montes
  */
 public class GestionDB {
         private static final String DireccionDB = "jdbc:sqlite:C:\\Users\\Usuario\\Desktop\\SistemaDistribuido\\SistemaDistribuido\\dbSistema.db"; 
@@ -158,5 +161,132 @@ public class GestionDB {
             System.err.println("Error al eliminar dispositivo: " + e.getMessage());
         }
     }
-    
+    // Método para levantar un ticket por usuario
+    public static void levantarTicket() {
+        System.out.println("Ingrese el ID del usuario:");
+        int idUsuario = Integer.parseInt(scanner.nextLine());
+        System.out.println("Ingrese el ID del dispositivo:");
+        int idDispositivo = Integer.parseInt(scanner.nextLine());
+        System.out.println("Ingrese la descripción del ticket:");
+        String descripcion = scanner.nextLine();
+        String estado = "activo";  // Estado inicial asignado automáticamente
+        System.out.println("Ingrese la prioridad del ticket (número entero):");
+        int prioridad = Integer.parseInt(scanner.nextLine());
+
+        try (Connection conexion = DriverManager.getConnection(DireccionDB)) {
+            // Listar sucursales y permitir que el usuario seleccione una
+            listarSucursales(conexion);
+            System.out.println("Ingrese el ID de la sucursal:");
+            int idSucursal = Integer.parseInt(scanner.nextLine());
+
+            // Obtener el ID del ingeniero disponible
+            int idIngeniero = obtenerIngenieroDisponible(conexion);
+            if (idIngeniero == -1) {
+                System.err.println("No se encontró un ingeniero disponible.");
+                return;
+            }
+
+            // Obtener el nombre de la sucursal seleccionada
+            String sucursal = obtenerNombreSucursal(conexion, idSucursal);
+            if (sucursal == null) {
+                System.err.println("No se encontró la sucursal con ID: " + idSucursal);
+                return;
+            }
+
+            // Inserción del ticket
+            String sqlInsert = "INSERT INTO TICKETS (ID_USUARIO, ID_INGENIERO, ID_DISPOSITIVO, DESCRIPCION, ESTADO, PRIORIDAD, ID_SUCURSAL) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement consultaInsert = conexion.prepareStatement(sqlInsert, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                consultaInsert.setInt(1, idUsuario);
+                consultaInsert.setInt(2, idIngeniero);
+                consultaInsert.setInt(3, idDispositivo);
+                consultaInsert.setString(4, descripcion);
+                consultaInsert.setString(5, estado);
+                consultaInsert.setInt(6, prioridad);
+                consultaInsert.setInt(7, idSucursal);
+                consultaInsert.executeUpdate();
+                
+                // Obtener el ID_TICKET generado
+                try (ResultSet generatedKeys = consultaInsert.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int idTicket = generatedKeys.getInt(1);
+
+                        // Generar el folio
+                        String folio = idUsuario + "-" + idIngeniero + "-" + sucursal + "-" + idTicket;
+
+                        // Actualizar el ticket con el folio generado
+                        String sqlUpdate = "UPDATE TICKETS SET FOLIO = ? WHERE ID_TICKET = ?";
+                        try (PreparedStatement consultaUpdate = conexion.prepareStatement(sqlUpdate)) {
+                            consultaUpdate.setString(1, folio);
+                            consultaUpdate.setInt(2, idTicket);
+                            consultaUpdate.executeUpdate();
+                        }
+                        System.out.println("Levantando ticket...");
+                        System.out.println("Ticket levantado correctamente con folio: " + folio);
+                    } else {
+                        System.err.println("Error al obtener el ID del nuevo ticket.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al levantar ticket: " + e.getMessage());
+        }
+    }
+
+    // Método para listar las sucursales
+    private static void listarSucursales(Connection conexion) throws SQLException {
+        String sql = "SELECT ID_SUCURSAL, NOMBRE_SUCURSAL FROM SUCURSALES";
+        try (PreparedStatement consulta = conexion.prepareStatement(sql);
+             ResultSet resultado = consulta.executeQuery()) {
+            System.out.println("Sucursales disponibles:");
+            while (resultado.next()) {
+                int idSucursal = resultado.getInt("ID_SUCURSAL");
+                String nombreSucursal = resultado.getString("NOMBRE_SUCURSAL");
+                System.out.println(idSucursal + ": " + nombreSucursal);
+            }
+        }
+    }
+
+    // Método para obtener el nombre de la sucursal seleccionada
+    private static String obtenerNombreSucursal(Connection conexion, int idSucursal) throws SQLException {
+        String sql = "SELECT NOMBRE_SUCURSAL FROM SUCURSALES WHERE ID_SUCURSAL = ?";
+        try (PreparedStatement consulta = conexion.prepareStatement(sql)) {
+            consulta.setInt(1, idSucursal);
+            try (ResultSet resultado = consulta.executeQuery()) {
+                if (resultado.next()) {
+                    return resultado.getString("NOMBRE_SUCURSAL");
+                } else {
+                    return null;  // No se encontró la sucursal
+                }
+            }
+        }
+    }
+
+    // Método para obtener un ingeniero disponible que no tenga tickets abiertos
+    private static int obtenerIngenieroDisponible(Connection conexion) throws SQLException {
+        String sql = "SELECT ID_INGENIERO FROM INGENIEROS WHERE ID_INGENIERO NOT IN (SELECT ID_INGENIERO FROM TICKETS WHERE ESTADO <> 'cerrado') LIMIT 1";
+        try (PreparedStatement consulta = conexion.prepareStatement(sql);
+             ResultSet resultado = consulta.executeQuery()) {
+            if (resultado.next()) {
+                return resultado.getInt("ID_INGENIERO");
+            } else {
+                return -1;  // No se encontró ningún ingeniero disponible
+            }
+        }
+    }
+
+    // Método para actualizar el estado de un ticket
+    public static void actualizarEstadoTicket(int idTicket, String nuevoEstado) {
+        try (Connection conexion = DriverManager.getConnection(DireccionDB)) {
+            String sqlUpdate = "UPDATE TICKETS SET ESTADO = ? WHERE ID_TICKET = ?";
+            try (PreparedStatement consultaUpdate = conexion.prepareStatement(sqlUpdate)) {
+                consultaUpdate.setString(1, nuevoEstado);
+                consultaUpdate.setInt(2, idTicket);
+                consultaUpdate.executeUpdate();
+                System.out.println("Estado del ticket actualizado correctamente.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar el estado del ticket: " + e.getMessage());
+        }
+    }
+
 }

@@ -38,7 +38,7 @@ public class Servidor {
    public static void main(String[] args) {
         int contadorClientes = 0;
         try {
-            ServerSocket server = new ServerSocket(5000);
+            ServerSocket server = new ServerSocket(5001);
 
             System.out.println("Servidor iniciado");
             cargarCatalogo();

@@ -247,10 +247,11 @@ public class ClienteHilo extends Thread{
             switch (opcion) {
                 case 1:
                     ConsultaTickets consulta = new ConsultaTickets(ConexionSQL.getDireccionDB());
+                    consulta.ejecutar();
                     break;
                 case 2:
                     System.out.println("Cerrando ticket...");
-                    // Lógica para cerrar tickets
+                    GestionDB.CerrarTicket();                    
                     break;
                 case 3:
                     salir = true;
@@ -275,6 +276,7 @@ public class ClienteHilo extends Thread{
                 case 1:
                     System.out.println("Consultando dispositivos...");
                     ConsultaDispositivos consulta = new ConsultaDispositivos(ConexionSQL.getDireccionDB()) {};
+                    consulta.ejecutar();
                     break;
                 case 2:
                     MenuIngeniero_ActualizacionDispositivo(scanner);
@@ -300,12 +302,10 @@ public class ClienteHilo extends Thread{
 
             switch (opcion) {
                 case 1:
-                    System.out.println("Agregando dispositivo...");
-                    // Lógica para agregar dispositivos
+                    GestionDB.agregarDispositivo();                    
                     break;
                 case 2:
-                    System.out.println("Eliminando dispositivo...");
-                    // Lógica para eliminar dispositivos
+                    GestionDB.eliminarDispositivo();                    
                     break;
                 case 3:
                     salir = true;
@@ -332,7 +332,8 @@ public class ClienteHilo extends Thread{
                     break;
                 case 2:
                     System.out.println("Consultando dispositivos...");
-                    ConsultaDispositivos consulta = new ConsultaDispositivos(ConexionSQL.getDireccionDB()) {};
+                    ConsultaDispositivos consulta = new ConsultaDispositivos(ConexionSQL.getDireccionDB());
+                    consulta.ejecutar();
                     break;
                 case 3:
                     salir = true;
@@ -356,11 +357,11 @@ public class ClienteHilo extends Thread{
             switch (opcion) {
                 case 1:
                     System.out.println("Consultando tickets...");
-                    ConsultaTickets consulta = new ConsultaTickets(ConexionSQL.getDireccionDB()) {};
+                    ConsultaTickets consulta = new ConsultaTickets(ConexionSQL.getDireccionDB());
+                    consulta.ejecutar();
                     break;
                 case 2:
-                    System.out.println("Levantando ticket...");
-                    // Lógica para levantar ticket
+                    GestionDB.levantarTicket();                    
                     break;
                 case 3:
                     salir = true;
