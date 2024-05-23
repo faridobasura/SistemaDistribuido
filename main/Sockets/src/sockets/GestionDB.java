@@ -288,5 +288,55 @@ public class GestionDB {
             System.err.println("Error al actualizar el estado del ticket: " + e.getMessage());
         }
     }
+    
+    public static void cerrarTicket() {
+    try {
+        try (Connection conexion = DriverManager.getConnection(DireccionDB)) {
+            System.out.println("Ingrese su ID de ingeniero:");
+            int idIngeniero = Integer.parseInt(scanner.nextLine());
+
+            String sql = "SELECT * FROM TICKETS WHERE ID_INGENIERO = ?";
+            try (PreparedStatement consultaTickets = conexion.prepareStatement(sql)) {
+                consultaTickets.setInt(1, idIngeniero);
+                ResultSet tablaTickets = consultaTickets.executeQuery();
+                if (!tablaTickets.isBeforeFirst()) {
+                    System.out.println("No hay tickets asociados al ID del ingeniero.");
+                    return;
+                }
+
+                System.out.println("Tickets asociados al ID del ingeniero:");
+                while (tablaTickets.next()) {
+                    int idTicket = tablaTickets.getInt("ID_TICKET");
+                    String descripcion = tablaTickets.getString("DESCRIPCION");
+                    System.out.println("ID Ticket: " + idTicket + ", Descripción: " + descripcion);
+                }
+
+                System.out.println("Ingrese el ID del ticket que desea cerrar:");
+                int idTicket = Integer.parseInt(scanner.nextLine());
+
+                System.out.println("¿Desea cerrar este ticket? (s/n):");
+                String confirmacion = scanner.nextLine();
+                if (confirmacion.equalsIgnoreCase("s")) {
+                    sql = "UPDATE TICKETS SET ESTADO = 'CERRADO', FECHA_ACTUALIZACION = CURRENT_TIMESTAMP WHERE ID_TICKET = ?";
+                    try (PreparedStatement consulta = conexion.prepareStatement(sql)) {
+                        consulta.setInt(1, idTicket);
+                        int filasActualizadas = consulta.executeUpdate();
+                        if (filasActualizadas > 0) {
+                            System.out.println("El ticket se ha cerrado correctamente.");
+                        } else {
+                            System.out.println("No se encontró el ticket especificado o no tiene permiso para cerrarlo.");
+                        }
+                    }
+                } else {
+                    System.out.println("Operación cancelada.");
+                }
+            }
+        }
+    } catch (NumberFormatException e) {
+        System.err.println("Por favor, ingrese un número válido.");
+    } catch (SQLException e) {
+        System.err.println("Error al cerrar ticket: " + e.getMessage());
+    }
+    }
 
 }

@@ -1,23 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package sockets;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -137,12 +125,13 @@ public class ClienteHilo extends Thread{
             System.out.println("2. Actualizar");
             System.out.println("3. Volver al menú anterior");
             int option = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             switch (option) {
                 case 1:
                     System.out.println("Consultando ingenieros...");
-                    ConsultaIngenieros consulta = new ConsultaIngenieros(ConexionSQL.getDireccionDB()) {};
+                    ConsultaIngenieros consulta = new ConsultaIngenieros(ConexionSQL.getDireccionDB());
+                    consulta.ejecutar();
                     break;
                 case 2:
                     MenuIngeniero_ActualizacionIngenieros(scanner);
@@ -164,7 +153,7 @@ public class ClienteHilo extends Thread{
             int opcion = scanner.nextInt();            System.out.println("\nActualizar Ingenieros:");
             System.out.println("1. Agregar");
 
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             switch (opcion) {
                 case 1:
@@ -189,15 +178,15 @@ public class ClienteHilo extends Thread{
             System.out.println("2. Actualizar");
             System.out.println("3. Volver al menú anterior");
             int option = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (option) {
                 case 1:
-                    System.out.println("Consultando usuarios...");
-                    ConsultaIngenieros consulta = new ConsultaIngenieros(ConexionSQL.getDireccionDB()) {};
+                    ConsultaIngenieros consulta = new ConsultaIngenieros(ConexionSQL.getDireccionDB());
+                    consulta.ejecutar();
                     break;
                 case 2:
-                    MenuIngeniero_ActualizacionIngenieros(scanner);
+                    MenuIngeniero_ActualizacionUsuarios(scanner);
                     break;
                 case 3:
                     exit = true;
@@ -216,7 +205,7 @@ public class ClienteHilo extends Thread{
             System.out.println("2. Eliminar");
             System.out.println("3. Volver al menú anterior");
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             switch (opcion) {
                 case 1:
@@ -242,7 +231,7 @@ public class ClienteHilo extends Thread{
             System.out.println("2. Cerrar");
             System.out.println("3. Volver al menú anterior");
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             switch (opcion) {
                 case 1:
@@ -251,7 +240,7 @@ public class ClienteHilo extends Thread{
                     break;
                 case 2:
                     System.out.println("Cerrando ticket...");
-                    GestionDB.CerrarTicket();                    
+                    GestionDB.cerrarTicket();                    
                     break;
                 case 3:
                     salir = true;
@@ -270,7 +259,7 @@ public class ClienteHilo extends Thread{
             System.out.println("2. Actualizar");
             System.out.println("3. Volver al menú anterior");
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             switch (opcion) {
                 case 1:
@@ -298,7 +287,7 @@ public class ClienteHilo extends Thread{
             System.out.println("2. Eliminar");
             System.out.println("3. Volver al menú anterior");
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             switch (opcion) {
                 case 1:
@@ -324,7 +313,7 @@ public class ClienteHilo extends Thread{
             System.out.println("2. Consultar Dispositivos");
             System.out.println("3. Volver al menú principal");
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -352,7 +341,7 @@ public class ClienteHilo extends Thread{
             System.out.println("2. Levantar Ticket");
             System.out.println("3. Volver al menú anterior");
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             switch (opcion) {
                 case 1:
