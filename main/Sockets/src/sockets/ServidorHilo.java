@@ -51,7 +51,7 @@ public class ServidorHilo extends Thread {
                 String correo = in.readUTF();
 
                 if (nombreCliente_hiloServidor.equals(correo)) {
-                    out.writeUTF("¡Bienvenido " + nombreCliente_hiloServidor + "!");
+                    out.writeUTF("¡Bienvenido a la sucursal" + nombreCliente_hiloServidor + "!");
                 } else {
                     out.writeUTF("No se encontró el correo electrónico en la base de datos.");
                 }

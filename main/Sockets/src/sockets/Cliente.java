@@ -36,44 +36,20 @@ public class Cliente {
             
             Socket sc = new Socket(dir, 5000);
             PaqueteEnvio dataOut = new PaqueteEnvio();    //  <-------------------
-            
-            
             DataInputStream in = new DataInputStream(sc.getInputStream());
             DataOutputStream out = new DataOutputStream(sc.getOutputStream());
             
             String mensaje = in.readUTF();
             int seleccion;
-            do {
-                System.out.println("\tBienvenido ");
-            
-            }while(seleccion < 1 || seleccion > 3);
-                String direccionIp;
-                switch (seleccion) {
-                    case 1:
-                        direccionIp = "192.168.129.130";
-                        break;
-                    case 2:
-                        direccionIp = "192.168.129.131";
-                        break;
-                    case 3: 
-                        direccionIp = "192.168.129.132";
-                        break;
-                    default:
-                    break;
-}
-
             
             int puertoRandom = generaPuertoAleatorio(5001, 5100);
             Thread hiloEscucha = new Thread(new ClienteServidorHilo(puertoRandom));
-            //ClienteServidorHilo hiloEscucha = new ClienteServidorHilo();
             ClienteHilo hiloMenu = new ClienteHilo(in, out, sc, puertoRandom);
             hiloEscucha.start();
             hiloMenu.start();
             hiloMenu.join();
             hiloEscucha.join();
-            
-            //ClienteServidorHilo hiloEscucha = new ClienteServidorHilo();
-            
+                        
             
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
