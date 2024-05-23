@@ -10,8 +10,10 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,81 +23,44 @@ import java.util.logging.Logger;
  * Farid Pozos
  * Andrés Montes
  */
-public class ServidorHilo extends Thread{
-    private DataInputStream in;
-    private DataOutputStream out;
-    private String nombreCliente;
-    private ArrayList<String> listaClientesN = new ArrayList<>();   // Lista de nombres
-    private ArrayList<String> listaClientesIP = new ArrayList<>();   // Lista de IPs
-    
+public class ServidorHilo extends Thread {
+    private int ID_hiloServidor;
+    private String direccionIP_hiloServidor;
+    private String nombreCliente_hiloServidor;
 
-    public ServidorHilo(DataInputStream in, DataOutputStream out, String nombreCliente) {
-        this.in = in;
-        this.out = out;
-        this.nombreCliente = nombreCliente;
-        
+    public ServidorHilo(int ID_hiloServidor, String direccionIP_hiloServidor, String nombreCliente_hiloServidor) {
+        this.ID_hiloServidor = ID_hiloServidor;
+        this.direccionIP_hiloServidor = direccionIP_hiloServidor;
+        this.nombreCliente_hiloServidor = nombreCliente_hiloServidor;
     }
-    
-    
+
     @Override
-    public void run(){
-        
-        //String mensaje;
-        int opcion;
-        File f = new File("NumeroAleatorios.txt");
-        boolean cerrar = false;
-        
-        while(!cerrar) {
-            
-            try {
-                
-                opcion = in.readInt();
-                
-                switch(opcion){
-                    case 1:
-                        escribirNumeroAleatorio(f, in.readInt());
-                        System.out.println("Se escribio el numero en el cliente " +  nombreCliente);
-                        out.writeUTF("Numero guardado correctamente");
-                        break;
-                    case 2:
-                        out.writeUTF("Escribe el mensaje:");
-                        String mensaje = in.readUTF();
-                        out.writeUTF("IP destino:");
-                        String ip = in.readUTF();
-                        out.writeUTF("Puerto:");
-                        int puerto = in.readInt();
-                        System.out.println(puerto);
-                        Socket ss = new Socket(ip, puerto);
-                        DataOutputStream outOut = new DataOutputStream(ss.getOutputStream());   // Reenvio de informacion al cliente destino
-                        outOut.writeUTF(mensaje);
-                        outOut.close();
-                        ss.close();
-                        break;
-                    case 3:
-                        System.out.println(in.readUTF());
-                        System.out.println("El cliente " + nombreCliente + " se desconecto");
-                        cerrar = true;
-                        break;
-                    case 4:
-                        System.out.println(in.readUTF());
-                    default:
-                        out.writeUTF("Solo los numeros que estan en pantalla");
+    public void run() {
+        try {
+            ServerSocket servidor = new ServerSocket(5000);
+            Socket sc;
+
+            while (true) {
+                sc = servidor.accept();
+
+                DataInputStream in = new DataInputStream(sc.getInputStream());
+                DataOutputStream out = new DataOutputStream(sc.getOutputStream());
+
+                System.out.println("Nuevo cliente (" + ID_hiloServidor + ")");
+                out.writeUTF("Ingrese su correo electrónico:");
+                String correo = in.readUTF();
+
+                if (nombreCliente_hiloServidor.equals(correo)) {
+                    out.writeUTF("¡Bienvenido " + nombreCliente_hiloServidor + "!");
+                } else {
+                    out.writeUTF("No se encontró el correo electrónico en la base de datos.");
                 }
-                
-            } catch (IOException ex) {
-                Logger.getLogger(ServidorHilo.class.getName()).log(Level.SEVERE, null, ex);
+
+                sc.close();
             }
-            
+        } catch (IOException ex) {
+            Logger.getLogger(ServidorHilo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
-    
-    public void escribirNumeroAleatorio(File f, int numeroAleatorio) throws IOException{
-        
-        FileWriter fw = new FileWriter(f, true);
-        fw.write(nombreCliente + ": " + numeroAleatorio + "\r\n");
-        fw.close();
-        
-    }
-    
 }
+  

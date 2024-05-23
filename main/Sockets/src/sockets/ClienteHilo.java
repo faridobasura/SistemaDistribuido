@@ -95,10 +95,6 @@ public class ClienteHilo extends Thread{
             ConexionSQL.desconectar(conexion);
     }
     
-    public int generaNumeroAleatorio(int minimo, int maximo){
-        return (int)Math.floor(Math.random() * (maximo-minimo+1) + (minimo));
-    }
-    
     private static void MenuIngeniero(Scanner scanner){
         boolean salir = false;
         while(!salir){

@@ -45,14 +45,7 @@ public class Cliente {
             int seleccion;
             do {
                 System.out.println("\tBienvenido ");
-                System.out.println("1. Nodo1");
-                System.out.println("2. Nodo2");
-                System.out.println("3. Nodo3");
-                System.out.println("Ingrese el numero del nodo para comunicarse: ");
-                seleccion = sn.nextInt();
-                if(seleccion < 1 || seleccion > 3){
-                    System.out.println("Nodo no disponible, vuelve a elegir.");
-                  }
+            
             }while(seleccion < 1 || seleccion > 3);
                 String direccionIp;
                 switch (seleccion) {
@@ -68,24 +61,7 @@ public class Cliente {
                     default:
                     break;
 }
-           /* 
-                    original
-            String nombre = sn.next();
-            out.writeUTF(nombre);
-            dataOut.setNick(nombre);  //  <-------------------
-            
-            mensaje = in.readUTF();
-            System.out.println(mensaje);
-            
-            String ip = sn.next();
-            out.writeUTF(ip);
-            dataOut.setNick(ip); */ //  <-------------------
-            /*
-            dataOut.setNick(nombre);  //  <-------------------
-            dataOut.setIp("xxxx.xxxx.xxxx.xxxx");    //  <-------------------
-            dataOut.setMensaje("Hola!");  //  <-------------------
-            ObjectOutputStream pData = new ObjectOutputStream(sc.getOutputStream()); //  <-------------------
-            pData.writeObject(dataOut); //  <-------------------*/
+
             
             int puertoRandom = generaPuertoAleatorio(5001, 5100);
             Thread hiloEscucha = new Thread(new ClienteServidorHilo(puertoRandom));
