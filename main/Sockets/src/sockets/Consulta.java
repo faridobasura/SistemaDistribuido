@@ -23,5 +23,3 @@ public abstract class Consulta {
     
     public abstract void ejecutar();
 }
-
-

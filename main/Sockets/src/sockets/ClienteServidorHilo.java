@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sockets;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,13 +18,34 @@ import java.util.logging.Logger;
 public class ClienteServidorHilo extends Thread{
     
     private int puerto;
+    private String ip;
+    private String nombre;
+    private String mo;
 
-    public ClienteServidorHilo(int puerto) {
+    public ClienteServidorHilo(int puerto, String ip, String nombre) {
         this.puerto = puerto;
+        this.ip = ip;
+        this.nombre = nombre;
     }
     
     public int getPuerto() {
         return puerto;
+    }
+    
+    public String getMo() {
+        return mo;
+    }
+    
+    public String[] getMoInfUsr(){
+        return mo.split("/");
+    }
+    
+    public int getMoTotalUsr(){
+        return mo.split("/").length;
+    }
+
+    public void setMo(String mo) {
+        this.mo = mo;
     }
     
     @Override
@@ -35,19 +53,45 @@ public class ClienteServidorHilo extends Thread{
         try {
             
             ServerSocket server = new ServerSocket(puerto);
-            System.out.println("El cliente está a la escucha, puerto: " + puerto);
+            System.out.println("-----------------------------------------------------------");
+            System.out.println("-----------------------------------------------------------");
+            System.out.println("El nodo " + nombre + " con IP " + ip + " está a la escucha,\n puerto: " + puerto);
+            System.out.println("-----------------------------------------------------------");
+            System.out.println("-----------------------------------------------------------");
             
             boolean escucha = true;
             
             while(escucha){
                 
                 Socket sc = server.accept();
+                
                 DataInputStream in = new DataInputStream(sc.getInputStream());
+                DataOutputStream out = new DataOutputStream(sc.getOutputStream());
                 
-                System.out.println("Te envian: " + in.readUTF());
+                LocalDateTime locaDate = LocalDateTime.now();
+                int hours  = locaDate.getHour();
+                int minutes = locaDate.getMinute();
+                int seconds = locaDate.getSecond();
                 
-                //sc.close();
-                //escucha = false;
+                String mensaje = in.readUTF();
+                
+                if(mensaje.contains("Finaliza")){
+                    in.close();
+                    out.close();
+                    sc.close();
+                    escucha = false;
+                    System.out.println("Adios");
+                }
+                else if(mensaje.contains(",") && mensaje.contains("/")){    // Se conecta un nuevo usuario
+                    setMo(mensaje);
+                    System.out.println(getMo());
+                }
+                else{
+                    System.out.println("Te envia " + mensaje);
+                    out.writeUTF(nombre + ": MENSAJE RECIBIDO (" + "Hora: " + hours  + ":"+ minutes +":"+ seconds + ")");
+                }
+                
+                sc.close();
                 
             }
             

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sockets;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,7 +12,7 @@ import java.util.Scanner;
  */
 public class ConexionSQL {
     //Ruta de la base de datos SQLITE
-    private static final String DireccionDB = "jdbc:sqlite:C:\\Users\\Usuario\\Desktop\\SistemaDistribuido\\SistemaDistribuido\\dbSistema.db"; 
+    private static final String DireccionDB = "jdbc:sqlite:dbSistema.db"; // C:\\Users\\Jessica Castro\\Desktop\\S-10\\SistemaDistribuido\\dbSistema.db
     
     //Metodo que establece la conexion
     public static Connection conectar(){
